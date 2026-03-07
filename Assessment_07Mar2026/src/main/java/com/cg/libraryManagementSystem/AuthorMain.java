@@ -15,78 +15,47 @@ public class AuthorMain {
         int choice = sc.nextInt();
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("my-pu");
         EntityManager em=emf.createEntityManager();
-        List<Author> authors = em.createQuery("SELECT a FROM Author a", Author.class).getResultList();
-        em.getTransaction().begin();
+        List<Author> authors = em.createQuery("SELECT a FROM Author a",Author.class).getResultList();
+        Service service = new Service();
         switch (choice){
             case 1:
                 //create:
-                Author author=new Author(101,"James Gosling","james@gmail.com");
-                Book b1=new Book("Java Fundamentals",450,author);
-                Book b2=new Book("Advanced Java",650,author);
-                Book b3=new Book("Java Streams",550,author);
-                List<Book> books=new ArrayList<Book>();
-                books.add(b1);
-                books.add(b2);
-                books.add(b3);
-                author.setBooks(books);
-                em.persist(author);
+                System.out.println("Enter Author's Id: ");
+                int authorId = sc.nextInt();
+                System.out.println("Enter Author's mail: ");
+                String email = sc.next();
+                System.out.println("Enter Author's Name: ");
+                String authorName = sc.next();
+                service.create(authorName,authorId,email);
                 break;
             case 2:
                 //read:
-                for(Author a:authors){
-                    System.out.println("Author Id : " + a.getAuthorId());
-                    System.out.println("Author Name : " + a.getAuthorName());
-                    System.out.println("-------------Books------------");
-
-                    for(Book b : a.getBooks()){
-                        System.out.println(b.getTitle() + " - " + b.getPrice());
-                    }
-                }
+                service.read(authors);
                 break;
             case 3:
                 //update:
-                System.out.println("Enter Book name");
-                String bookName=sc.nextLine();
-                for(Author a:authors){
-                    for(Book b : a.getBooks()){
-                        if(b.getTitle().equals("bookName")){
-                            System.out.println("Old price: " + b.getPrice());
-                            b.setPrice(700);
-                            System.out.println("New price: " + b.getPrice());
-                        }
-                    }
-                }
+                System.out.println("Enter Author's Id: ");
+                int id=sc.nextInt();
+                Author author = em.find(Author.class, id);
+                List<Book> books = author.getBooks();
+                service.update(books);
                 break;
             case 4:
-                //delete
-                System.out.println("Enter bookName");
-                String book=sc.nextLine();
-                for(Author a:authors){
-                    for(Book b : a.getBooks()){
-                        if(b.getTitle().equals("Java Streams")){
-                            em.remove(b);
-                            System.out.println("Book Removed");
-                            break;
-                        }
-                    }
-                }
-
+                //delete book
+                System.out.println("Enter Author's Id: ");
+                int id1=sc.nextInt();
+                Author author1 = em.find(Author.class, id1);
+                List<Book> booksList = author1.getBooks();
+                System.out.println("Enter Book's Name: ");
+                String nameBook=sc.nextLine();
+                service.deleteBook(booksList,nameBook);
                 break;
             case 5:
                 //delete author:
-                System.out.println("Enter Author ID");
-                int authorId=sc.nextInt();
-                Author a4=em.find(Author.class,authorId);
-                if(a4!=null){
-                    em.remove(a4);
-                    System.out.println("Author deleted successfully");
-                }
-                else
-                    System.out.println("Author not found");
-                break;
-            default: System.out.println("Invalid choice");
+                System.out.println("Enter Author's Id: ");
+                int idAuthor=sc.nextInt();
+                service.deleteAuthor(idAuthor);
         }
-        em.getTransaction().commit();
 
 
 
