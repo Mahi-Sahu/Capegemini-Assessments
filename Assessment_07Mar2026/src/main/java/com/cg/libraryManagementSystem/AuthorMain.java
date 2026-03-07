@@ -15,6 +15,7 @@ public class AuthorMain {
         int choice = sc.nextInt();
         EntityManagerFactory emf = Persistence.createEntityManagerFactory("my-pu");
         EntityManager em=emf.createEntityManager();
+        List<Author> authors = em.createQuery("SELECT a FROM Author a", Author.class).getResultList();
         em.getTransaction().begin();
         switch (choice){
             case 1:
@@ -32,10 +33,7 @@ public class AuthorMain {
                 break;
             case 2:
                 //read:
-                System.out.println("Enter Author ID");
-                int id=sc.nextInt();
-                Author a=em.find(Author.class,id);
-                if(a!=null){
+                for(Author a:authors){
                     System.out.println("Author Id : " + a.getAuthorId());
                     System.out.println("Author Name : " + a.getAuthorName());
                     System.out.println("-------------Books------------");
@@ -44,39 +42,35 @@ public class AuthorMain {
                         System.out.println(b.getTitle() + " - " + b.getPrice());
                     }
                 }
-                else{
-                    System.out.println("Author Id not found");
-                }
                 break;
             case 3:
-                    //update:
-                System.out.println("Enter Author ID");
-                int authId=sc.nextInt();
-                Author a2=em.find(Author.class,authId);
-                for(Book b : a2.getBooks()){
-                    if(b.getTitle().equals("Advanced Java")){
-                        System.out.println("Old price: " + b.getPrice());
-                        b.setPrice(700);
-                        System.out.println("New price: " + b.getPrice());
+                //update:
+                System.out.println("Enter Book name");
+                String bookName=sc.nextLine();
+                for(Author a:authors){
+                    for(Book b : a.getBooks()){
+                        if(b.getTitle().equals("bookName")){
+                            System.out.println("Old price: " + b.getPrice());
+                            b.setPrice(700);
+                            System.out.println("New price: " + b.getPrice());
+                        }
                     }
                 }
                 break;
             case 4:
                 //delete
-                System.out.println("Enter authId");
-                int idAuthor=sc.nextInt();
-                Author a3=em.find(Author.class,idAuthor);
-                if(a3!=null){
-                    for(Book b : a3.getBooks()){
+                System.out.println("Enter bookName");
+                String book=sc.nextLine();
+                for(Author a:authors){
+                    for(Book b : a.getBooks()){
                         if(b.getTitle().equals("Java Streams")){
                             em.remove(b);
+                            System.out.println("Book Removed");
                             break;
                         }
                     }
-                    System.out.println("Book deleted successfully");
                 }
-                else
-                    System.out.println("Books not found");
+
                 break;
             case 5:
                 //delete author:
