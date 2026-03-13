@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"> <!-- bean definitions here -->
+    <!-- Bean configuration in Ioc to get the object of HelloWorld when and where needed-->
+    <bean id="hello" class="com.cg.bean.HelloWorld" scope="prototype">
+<!--        setter injection-->
+        <property name="name" value="Mahi"></property>
+<!--        constructor injection-->
+<!--        <constructor-arg name="name" value="M"></constructor-arg>-->
+        <property name="language">
+            <list>
+                <value>Hindi</value>
+                <value>English</value>
+                <value>Sanskrit</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="emp" class="com.cg.bean.Employee" autowire="byType">
+        <property name="empid" value="1001"></property>
+        <property name="name" value="Rosie"></property>
+<!--        <property name="address" ref="add"></property> autowire will automatically wire with add-->
+<!--        <constructor-arg name="empid" value="101"/>-->
+<!--        <constructor-arg name="name" value="Mahi"/>-->
+<!--        <constructor-arg name="address" ref="add"/>   -->
+    </bean>
+    <bean id="add" class="com.cg.bean.Address">
+        <property name="city" value="Greater Noida"></property>
+        <property name="country" value="India"></property>
+        <property name="zip" value="201310"></property>
+    </bean>
+</beans>
