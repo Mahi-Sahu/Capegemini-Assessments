@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context" xsi:schemaLocation="
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd"> <!-- bean definitions here -->
+    <!--    to enable spring annotations-->
+    <context:annotation-config/>
+    <bean id="book" class="com.cg.bean.Book">
+        <constructor-arg name="bookId" value="101"/>
+        <constructor-arg name="author" value="Rod Johnson"/>
+        <constructor-arg name="title" value="Spring Framework"/>
+    </bean>
+    <bean id="lib" class="com.cg.bean.Librarian">
+        <constructor-arg name="librarianId" value="10001"/>
+        <constructor-arg name="name" value="Amit"/>
+        <constructor-arg name="book" ref="book"/>
+    </bean>
+</beans>
